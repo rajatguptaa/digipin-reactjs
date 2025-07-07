@@ -20,8 +20,7 @@
     "build": "npm run clean && rollup -c",
     "test": "jest",
     "lint": "eslint src --ext .ts,.tsx",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run lint"
+    "prepare": "npm run build"
   },
   "keywords": [
     "digipin",

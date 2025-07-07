@@ -112,4 +112,10 @@ function App() {
 
 To run the included example/demo app:
 
+```sh
+cd example
+npm install
+npm run dev
 ```
+
+Open the printed URL (usually http://localhost:5173 or similar) in your browser to view and test the components live.
