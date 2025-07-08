@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import digipin from 'digipin';
+import digipin from 'digipinjs';
 
 export function useDigiPinToLatLon() {
   const [digipinInput, setDigiPinInput] = useState('');

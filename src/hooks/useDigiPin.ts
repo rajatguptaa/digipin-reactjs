@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import digipin from 'digipin';
+import digipin from 'digipinjs';
 
 export function useDigiPin() {
   const [input, setInput] = useState('');

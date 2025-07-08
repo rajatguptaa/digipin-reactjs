@@ -72,15 +72,14 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "digipin": "^0.0.3-dev",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "digipinjs": "^0.0.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.3",
-    "@testing-library/react-hooks": "^8.0.1",
     "@types/chai": "^5.2.2",
     "@types/jest": "^30.0.0",
     "@types/mocha": "^10.0.10",
