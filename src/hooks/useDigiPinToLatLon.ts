@@ -12,7 +12,7 @@ export function useDigiPinToLatLon() {
     setError(null);
     try {
       const result = getLatLngFromDigiPin(digipinInput.trim());
-      setLatLonResult(result);
+      setLatLonResult({ lat: result.latitude, lon: result.longitude });
     } catch (e: any) {
       setError(e.message || 'Unknown error');
       setLatLonResult(null);
