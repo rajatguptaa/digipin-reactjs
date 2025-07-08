@@ -74,7 +74,7 @@
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "digipinjs": "^0.0.3"
+    "digipinjs": "^1.1.8"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
