@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import digipin from 'digipinjs';
+import { getLatLngFromDigiPin } from 'digipinjs';
 
 export function useDigiPinToLatLon() {
   const [digipinInput, setDigiPinInput] = useState('');
@@ -11,7 +11,7 @@ export function useDigiPinToLatLon() {
     setLoading(true);
     setError(null);
     try {
-      const result = digipin.getLatLonFromDIGIPIN(digipinInput.trim());
+      const result = getLatLngFromDigiPin(digipinInput.trim());
       setLatLonResult(result);
     } catch (e: any) {
       setError(e.message || 'Unknown error');

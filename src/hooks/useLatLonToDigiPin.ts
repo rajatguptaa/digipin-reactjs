@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import digipin from 'digipinjs';
+import { getDigiPin } from 'digipinjs';
 
 export function useLatLonToDigiPin() {
   const [lat, setLat] = useState('');
@@ -17,7 +17,7 @@ export function useLatLonToDigiPin() {
       if (isNaN(latNum) || isNaN(lonNum)) {
         throw new Error('Invalid latitude or longitude');
       }
-      const result = digipin.getDIGIPINFromLatLon(latNum, lonNum);
+      const result = getDigiPin(latNum, lonNum);
       setDigiPinResult(result);
     } catch (e: any) {
       setError(e.message || 'Unknown error');
