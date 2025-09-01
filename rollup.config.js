@@ -30,5 +30,5 @@ module.exports = {
       exclude: ['**/*.test.ts', '**/*.test.tsx', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
     }),
   ],
-  external: ['react', 'react-dom', 'digipin'],
-}; 
+  external: ['react', 'react-dom', 'digipinjs'],
+};

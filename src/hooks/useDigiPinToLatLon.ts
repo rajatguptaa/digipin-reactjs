@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { getLatLngFromDigiPin } from 'digipinjs';
 
 export function useDigiPinToLatLon() {
@@ -7,11 +7,15 @@ export function useDigiPinToLatLon() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const convert = () => {
+  const convert = useCallback(() => {
     setLoading(true);
     setError(null);
     try {
-      const result = getLatLngFromDigiPin(digipinInput.trim());
+      const input = digipinInput.trim();
+      if (!input) {
+        throw new Error('DIGIPIN cannot be empty');
+      }
+      const result = getLatLngFromDigiPin(input);
       setLatLonResult({ lat: result.latitude, lon: result.longitude });
     } catch (e: any) {
       setError(e.message || 'Unknown error');
@@ -19,7 +23,7 @@ export function useDigiPinToLatLon() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [digipinInput]);
 
   return { digipinInput, setDigiPinInput, latLonResult, loading, error, convert };
-} 
+}

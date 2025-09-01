@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { getDigiPin } from 'digipinjs';
 
 export function useLatLonToDigiPin() {
@@ -8,14 +8,20 @@ export function useLatLonToDigiPin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const convert = () => {
+  const convert = useCallback(() => {
     setLoading(true);
     setError(null);
     try {
-      const latNum = parseFloat(lat);
-      const lonNum = parseFloat(lon);
+      const latNum = Number(lat.trim());
+      const lonNum = Number(lon.trim());
       if (isNaN(latNum) || isNaN(lonNum)) {
         throw new Error('Invalid latitude or longitude');
+      }
+      if (latNum < -90 || latNum > 90) {
+        throw new Error('Latitude must be between -90 and 90');
+      }
+      if (lonNum < -180 || lonNum > 180) {
+        throw new Error('Longitude must be between -180 and 180');
       }
       const result = getDigiPin(latNum, lonNum);
       setDigiPinResult(result);
@@ -25,7 +31,7 @@ export function useLatLonToDigiPin() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [lat, lon]);
 
   return { lat, setLat, lon, setLon, digipinResult, loading, error, convert };
-} 
+}
