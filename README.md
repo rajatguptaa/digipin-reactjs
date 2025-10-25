@@ -6,6 +6,8 @@ React hooks and components for integrating DIGIPIN (Indian Postal Digital PIN) g
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ---
+**Live demo:** [thedigipin.net](https://thedigipin.net/?tab=0&zoom=5&encTab=0&base=cartoDark)
+---
 
 ## Features
 - Convert between DIGIPIN and latitude/longitude
