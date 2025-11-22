@@ -1,8 +1,25 @@
 import React from 'react';
 import { useDigiPin } from '../hooks/useDigiPin';
 
-export const DigiPinInput: React.FC = () => {
+export interface DigiPinInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  onResult?: (result: any) => void;
+  onSearchError?: (error: string) => void;
+}
+
+export const DigiPinInput: React.FC<DigiPinInputProps> = ({ onResult, onSearchError, ...props }) => {
   const { input, setInput, result, loading, error, search } = useDigiPin();
+
+  React.useEffect(() => {
+    if (result && onResult) {
+      onResult(result);
+    }
+  }, [result, onResult]);
+
+  React.useEffect(() => {
+    if (error && onSearchError) {
+      onSearchError(error);
+    }
+  }, [error, onSearchError]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +33,7 @@ export const DigiPinInput: React.FC = () => {
         value={input}
         onChange={e => setInput(e.target.value)}
         placeholder="Enter DigiPin query"
+        {...props}
       />
       <button type="submit" disabled={loading}>
         {loading ? 'Searching...' : 'Search'}

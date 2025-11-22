@@ -39,7 +39,13 @@ export function useDigiPin() {
       }
       setResult(res);
     } catch (e: any) {
-      setError(e.message || 'Unknown error');
+      let errorMessage = 'Unknown error';
+      if (e instanceof Error) {
+        errorMessage = e.message;
+      } else if (typeof e === 'string') {
+        errorMessage = e;
+      }
+      setError(errorMessage);
       setResult(null);
     } finally {
       setLoading(false);
