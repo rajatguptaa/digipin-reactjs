@@ -14,6 +14,15 @@
     "allowSyntheticDefaultImports": true,
     "rootDir": "./src"
   },
-  "include": ["src", "src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
-} 
+  "include": [
+    "src",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/__tests__/**/*.ts",
+    "src/__tests__/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

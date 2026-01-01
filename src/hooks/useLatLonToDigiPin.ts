@@ -25,8 +25,14 @@ export function useLatLonToDigiPin() {
       }
       const result = getDigiPin(latNum, lonNum);
       setDigiPinResult(result);
-    } catch (e: any) {
-      setError(e.message || 'Unknown error');
+    } catch (e: unknown) {
+      let errorMessage = 'Unknown error';
+      if (e instanceof Error) {
+        errorMessage = e.message;
+      } else if (typeof e === 'string') {
+        errorMessage = e;
+      }
+      setError(errorMessage);
       setDigiPinResult(null);
     } finally {
       setLoading(false);

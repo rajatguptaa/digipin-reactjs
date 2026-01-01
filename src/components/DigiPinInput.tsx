@@ -1,8 +1,8 @@
 import React from 'react';
-import { useDigiPin } from '../hooks/useDigiPin';
+import { useDigiPin, SearchResult } from '../hooks/useDigiPin';
 
 export interface DigiPinInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  onResult?: (result: any) => void;
+  onResult?: (result: SearchResult) => void;
   onSearchError?: (error: string) => void;
 }
 

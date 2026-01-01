@@ -1,16 +1,43 @@
-module.exports = {
-  ignores: ['dist', 'node_modules', 'example/node_modules'],
-  files: ['src/**/*.ts', 'src/**/*.tsx'],
-  languageOptions: {
-    parser: '@typescript-eslint/parser',
-    parserOptions: {
-      project: './tsconfig.json',
+const tsParser = require('@typescript-eslint/parser');
+const tsPlugin = require('@typescript-eslint/eslint-plugin');
+const js = require('@eslint/js');
+
+module.exports = [
+  js.configs.recommended,
+  {
+    ignores: ['dist', 'node_modules', 'example'],
+  },
+  {
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+    },
+    rules: {
+      ...tsPlugin.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
   },
-  plugins: {
-    '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
+  {
+    files: ['src/__tests__/**/*.ts', 'src/__tests__/**/*.tsx'],
+    languageOptions: {
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        test: 'readonly',
+        jest: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+      },
+    },
   },
-  rules: {
-    // Add or adjust rules as needed
-  },
-}; 
+]; 

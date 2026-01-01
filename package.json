@@ -18,7 +18,7 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && rollup -c",
     "test": "jest",
-    "lint": "eslint src --ext .ts,.tsx",
+    "lint": "eslint src",
     "prepare": "npm run build"
   },
   "sideEffects": false,

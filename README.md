@@ -1,19 +1,24 @@
 # digipin-reactjs
 
-React hooks and components for integrating DIGIPIN (Indian Postal Digital PIN) geocoding into React apps. Includes hooks, prebuilt UI, and helpers for seamless integration.
+React hooks and components for integrating **DIGIPIN** (Indian Postal Digital PIN) geocoding into React apps. Includes hooks, prebuilt UI, and helpers for seamless integration.
 
 [![npm version](https://img.shields.io/npm/v/digipin-reactjs.svg)](https://www.npmjs.com/package/digipin-reactjs)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Downloads](https://img.shields.io/npm/dm/digipin-reactjs.svg)](https://www.npmjs.com/package/digipin-reactjs)
 
 ---
+
 **Live demo:** [thedigipin.net](https://thedigipin.net/?tab=0&zoom=5&encTab=0&base=cartoDark)
+
 ---
 
 ## Features
-- Convert between DIGIPIN and latitude/longitude
-- React hook: `useDigiPin`
-- Prebuilt UI component: `DigiPinInput`
-- TypeScript support
+
+- **Bidirectional Conversion**: Convert between DIGIPIN and Latitude/Longitude.
+- **React Hooks**: `useDigiPin`, `useDigiPinToLatLon`, `useLatLonToDigiPin`.
+- **Prebuilt UI**: Ready-to-use search and conversion components.
+- **Type Safety**: Full TypeScript support.
+- **Lightweight**: Minimal dependencies.
 
 ---
 
@@ -21,103 +26,111 @@ React hooks and components for integrating DIGIPIN (Indian Postal Digital PIN) g
 
 ```bash
 npm install digipin-reactjs digipin react react-dom
+# or
+yarn add digipin-reactjs digipin react react-dom
 ```
 
 ---
 
-## Usage
+## Real World Usage
 
-### 1. Prebuilt Input Component
+### 1. Delivery Location Picker
+Allow users to enter a DIGIPIN to pinpoint their delivery location on a map.
+
 ```tsx
-import { DigiPinInput } from 'digipin-reactjs';
+import { useDigiPinToLatLon } from 'digipin-reactjs';
+import { useEffect } from 'react';
 
-function App() {
+function DeliveryLocator() {
+  const { digipinInput, setDigiPinInput, latLonResult, convert } = useDigiPinToLatLon();
+
+  useEffect(() => {
+    if (latLonResult) {
+       console.log("Updating Map Center:", latLonResult);
+       // updateMap(latLonResult.lat, latLonResult.lon);
+    }
+  }, [latLonResult]);
+
   return (
-    <div style={{ maxWidth: 500, margin: '2rem auto', fontFamily: 'sans-serif' }}>
-      <h1>DigiPin React Example</h1>
-      <DigiPinInput />
+    <div>
+      <input 
+        type="text" 
+        value={digipinInput} 
+        onChange={(e) => setDigiPinInput(e.target.value)}
+        placeholder="Enter DIGIPIN (e.g., 12-34-56)"
+      />
+      <button onClick={convert}>Locate Address</button>
     </div>
   );
 }
 ```
 
-### 2. Custom UI with the Hook
-```tsx
-import { useDigiPin } from 'digipin-reactjs';
+### 2. Location Tagging
+Automatically generate a DIGIPIN for a user's current location.
 
-function CustomDigiPinForm() {
-  const { input, setInput, result, loading, error, search } = useDigiPin();
-
-  return (
-    <form onSubmit={e => { e.preventDefault(); search(input); }}>
-      <input value={input} onChange={e => setInput(e.target.value)} placeholder="Enter DIGIPIN or lat,lon" />
-      <button type="submit" disabled={loading}>{loading ? 'Searching...' : 'Search'}</button>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
-    </form>
-  );
-}
-```
-
-### 3. Convert Latitude/Longitude to DIGIPIN (Hook)
 ```tsx
 import { useLatLonToDigiPin } from 'digipin-reactjs';
 
-function LatLonForm() {
-  const { lat, setLat, lon, setLon, digipinResult, loading, error, convert } = useLatLonToDigiPin();
+function CurrentLocationTagger() {
+  const { setLat, setLon, digipinResult, convert } = useLatLonToDigiPin();
+
+  const handleGetLocation = () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setLat(pos.coords.latitude.toString());
+      setLon(pos.coords.longitude.toString());
+      // Trigger conversion immediately or via effect
+      setTimeout(convert, 0); 
+    });
+  };
+
   return (
-    <form onSubmit={e => { e.preventDefault(); convert(); }}>
-      <input value={lat} onChange={e => setLat(e.target.value)} placeholder="Latitude" />
-      <input value={lon} onChange={e => setLon(e.target.value)} placeholder="Longitude" />
-      <button type="submit" disabled={loading}>Convert</button>
-      {error && <div>{error}</div>}
-      {digipinResult && <div>DIGIPIN: {digipinResult}</div>}
-    </form>
-  );
-}
-```
-
-### 4. Convert DIGIPIN to Latitude/Longitude (Hook)
-```tsx
-import { useDigiPinToLatLon } from 'digipin-reactjs';
-
-function DigiPinForm() {
-  const { digipinInput, setDigiPinInput, latLonResult, loading, error, convert } = useDigiPinToLatLon();
-  return (
-    <form onSubmit={e => { e.preventDefault(); convert(); }}>
-      <input value={digipinInput} onChange={e => setDigiPinInput(e.target.value)} placeholder="DIGIPIN" />
-      <button type="submit" disabled={loading}>Convert</button>
-      {error && <div>{error}</div>}
-      {latLonResult && <div>Lat: {latLonResult.lat}, Lon: {latLonResult.lon}</div>}
-    </form>
-  );
-}
-```
-
-### 5. Prebuilt UI Components
-```tsx
-import { LatLonToDigiPinInput, DigiPinToLatLonInput } from 'digipin-reactjs';
-
-function App() {
-  return (
-    <>
-      <LatLonToDigiPinInput />
-      <DigiPinToLatLonInput />
-    </>
+      <div>
+        <button onClick={handleGetLocation}>Get My Digital Address</button>
+        {digipinResult && <p>Your DIGIPIN: <strong>{digipinResult}</strong></p>}
+      </div>
   );
 }
 ```
 
 ---
 
-## Example App
+## API Reference
 
-To run the included example/demo app:
+### Hooks
 
-```sh
-cd example
-npm install
-npm run dev
-```
+#### `useDigiPin()`
+Universal search hook that detects if input is Lat/Lon or DigiPin.
+- **Returns**: `{ input, setInput, result, loading, error, search }`
+- **usage**: `search("1234")` or `search()` (uses state)
 
-Open the printed URL (usually http://localhost:5173 or similar) in your browser to view and test the components live.
+#### `useDigiPinToLatLon()`
+Dedicated hook for decoding DigiPin.
+- **Returns**: `{ digipinInput, setDigiPinInput, latLonResult, loading, error, convert }`
+
+#### `useLatLonToDigiPin()`
+Dedicated hook for encoding Lat/Lon to DigiPin.
+- **Returns**: `{ lat, setLat, lon, setLon, digipinResult, loading, error, convert }`
+
+### Components
+
+- `<DigiPinInput />`: A simple search box for DigiPin.
+- `<LatLonToDigiPinInput />`: UI for encoding coordinates.
+- `<DigiPinToLatLonInput />`: UI for decoding DigiPin.
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.

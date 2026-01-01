@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { getDigiPin, getLatLngFromDigiPin } from 'digipinjs';
 
-type SearchResult = string | { latitude: number; longitude: number } | null;
+export type SearchResult = string | { latitude: number; longitude: number } | null;
 
 export function useDigiPin() {
   const [input, setInput] = useState('');
@@ -9,13 +9,16 @@ export function useDigiPin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const search = useCallback(async (query: string) => {
+  const search = useCallback(async (query?: string) => {
     setLoading(true);
     setError(null);
     try {
       let res;
+      // Use provided query or fall back to state input
+      const textToSearch = query !== undefined ? query : input;
+      const trimmed = textToSearch.trim();
+
       // If input looks like lat,lon, encode to DIGIPIN
-      const trimmed = query.trim();
       if (/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(trimmed)) {
         const [latStr, lonStr] = trimmed.split(',');
         const lat = Number(latStr.trim());
@@ -38,7 +41,7 @@ export function useDigiPin() {
         res = getLatLngFromDigiPin(trimmed);
       }
       setResult(res);
-    } catch (e: any) {
+    } catch (e: unknown) {
       let errorMessage = 'Unknown error';
       if (e instanceof Error) {
         errorMessage = e.message;
@@ -50,7 +53,7 @@ export function useDigiPin() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [input]);
 
   return { input, setInput, result, loading, error, search };
 }

@@ -17,8 +17,14 @@ export function useDigiPinToLatLon() {
       }
       const result = getLatLngFromDigiPin(input);
       setLatLonResult({ lat: result.latitude, lon: result.longitude });
-    } catch (e: any) {
-      setError(e.message || 'Unknown error');
+    } catch (e: unknown) {
+      let errorMessage = 'Unknown error';
+      if (e instanceof Error) {
+        errorMessage = e.message;
+      } else if (typeof e === 'string') {
+        errorMessage = e;
+      }
+      setError(errorMessage);
       setLatLonResult(null);
     } finally {
       setLoading(false);
